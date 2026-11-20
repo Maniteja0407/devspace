@@ -1,5 +1,5 @@
-import React from 'react';
-import { Users, BookOpen, MapPin, Link as LinkIcon, Calendar } from 'lucide-react';
+
+import { MapPin, Link as LinkIcon, Calendar } from 'lucide-react';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
 const COLORS = ['#6366f1', '#a855f7', '#ec4899', '#10b981', '#f59e0b', '#3b82f6', '#14b8a6', '#f43f5e', '#84cc16', '#06b6d4'];

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Search, Terminal } from 'lucide-react';
 
 export default function SearchBar({ onSearch, loading }) {

@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { Star, GitFork, ExternalLink, Code } from 'lucide-react';
 
 export default function RepoList({ repos }) {

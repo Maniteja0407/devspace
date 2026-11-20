@@ -1,57 +1,18 @@
-import React, { useState } from 'react';
+import { useMemo } from 'react';
 import SearchBar from './components/SearchBar';
 import ProfileCard from './components/ProfileCard';
 import RepoList from './components/RepoList';
 import { AlertCircle } from 'lucide-react';
+import { useGitHubProfile } from './hooks/useGitHubProfile';
+import { getLanguageStats, getFeaturedRepos } from './utils/repoStats';
 
 export default function App() {
-  const [userData, setUserData] = useState(null);
-  const [repoData, setRepoData] = useState([]);
-  const [langData, setLangData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const { status, user, repos, error, search } = useGitHubProfile();
+  const loading = status === 'loading';
 
-  const fetchGitHubData = async (username) => {
-    setLoading(true);
-    setError(null);
-    setUserData(null);
-    setRepoData([]);
-    setLangData([]);
-
-    try {
-      const userRes = await fetch(`https://api.github.com/users/${username}`);
-      if (!userRes.ok) {
-        throw new Error(userRes.status === 404 ? 'User not found' : 'API error occurred');
-      }
-      const user = await userRes.json();
-      setUserData(user);
-
-      const repoRes = await fetch(`https://api.github.com/users/${username}/repos?per_page=100&sort=updated`);
-      if (repoRes.ok) {
-        const repos = await repoRes.json();
-        const sortedRepos = [...repos].sort((a, b) => b.stargazers_count - a.stargazers_count);
-        setRepoData(sortedRepos);
-
-        const langCounts = {};
-        repos.forEach(repo => {
-          if (repo.language) {
-            langCounts[repo.language] = (langCounts[repo.language] || 0) + 1;
-          }
-        });
-
-        const formattedLangData = Object.keys(langCounts).map(key => ({
-          name: key,
-          value: langCounts[key]
-        })).sort((a, b) => b.value - a.value);
-
-        setLangData(formattedLangData);
-      }
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Recalculate only when repos change, not on every render.
+  const langData = useMemo(() => getLanguageStats(repos), [repos]);
+  const featuredRepos = useMemo(() => getFeaturedRepos(repos), [repos]);
 
   return (
     <div className="min-h-screen bg-[#0b0f19] text-slate-100 px-4 py-16 sm:px-6 lg:px-8 relative overflow-x-hidden">
@@ -60,12 +21,12 @@ export default function App() {
       <div className="absolute bottom-[-10%] right-[-20%] w-[600px] h-[600px] bg-purple-500/10 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="max-w-5xl mx-auto relative z-10">
-        <SearchBar onSearch={fetchGitHubData} loading={loading} />
+        <SearchBar onSearch={search} loading={loading} />
 
         {error && (
           <div className="flex items-center gap-3 p-4 bg-rose-500/10 border border-rose-500/20 rounded-2xl max-w-2xl mx-auto text-rose-400 text-sm backdrop-blur-md">
             <AlertCircle className="w-5 h-5 shrink-0" />
-            <span>{error}. Please verify the username and try again.</span>
+            <span>{error}</span>
           </div>
         )}
 
@@ -82,10 +43,10 @@ export default function App() {
           </div>
         )}
 
-        {userData && !loading && (
+        {status === 'success' && (
           <div className="transition-all duration-500 ease-out">
-            <ProfileCard user={userData} langData={langData} />
-            <RepoList repos={repoData} />
+            <ProfileCard user={user} langData={langData} />
+            <RepoList repos={featuredRepos} />
           </div>
         )}
       </div>

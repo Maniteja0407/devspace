@@ -33,3 +33,8 @@ npm install
 
 4. Start the local development server:
 npm run dev
+
+
+---
+
+>>>>>>> 1a7b4cb07ebb89f4035afb37078937269bbabed2

@@ -63,7 +63,7 @@ export default function App() {
         <SearchBar onSearch={fetchGitHubData} loading={loading} />
 
         {error && (
-          <div className="flex items-center gap-3 p-4 bg-rose-500/10 border border-rose-500/20 rounded-2xl max-w-2xl mx-auto text-rose-400 text-sm backdrop-blur-md animate-fadeIn">
+          <div className="flex items-center gap-3 p-4 bg-rose-500/10 border border-rose-500/20 rounded-2xl max-w-2xl mx-auto text-rose-400 text-sm backdrop-blur-md">
             <AlertCircle className="w-5 h-5 shrink-0" />
             <span>{error}. Please verify the username and try again.</span>
           </div>

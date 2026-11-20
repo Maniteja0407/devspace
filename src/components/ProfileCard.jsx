@@ -2,12 +2,12 @@ import React from 'react';
 import { Users, BookOpen, MapPin, Link as LinkIcon, Calendar } from 'lucide-react';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
-const COLORS = ['#6366f1', '#a855f7', '#ec4899', '#10b981', '#f59e0b', '#3b82f6'];
-
+const COLORS = ['#6366f1', '#a855f7', '#ec4899', '#10b981', '#f59e0b', '#3b82f6', '#14b8a6', '#f43f5e', '#84cc16', '#06b6d4'];
 export default function ProfileCard({ user, langData }) {
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
   };
+  const blogUrl = user.blog && (user.blog.startsWith('http') ? user.blog : `https://${user.blog}`);
 
   return (
     <div style={styles.grid}>
@@ -33,7 +33,7 @@ export default function ProfileCard({ user, langData }) {
 
         <div style={styles.metaList}>
           {user.location && <div style={styles.metaItem}><MapPin size={14} /> {user.location}</div>}
-          {user.blog && <div style={styles.metaItem}><LinkIcon size={14} /> <a href={user.blog} style={styles.inlineLink}>{user.blog}</a></div>}
+          {user.blog && <div style={styles.metaItem}><LinkIcon size={14} /> <a href={blogUrl} target="_blank" rel="noopener noreferrer" style={styles.inlineLink}>{user.blog}</a></div>}
           <div style={styles.metaItem}><Calendar size={14} /> Joined {formatDate(user.created_at)}</div>
         </div>
       </div>
@@ -63,8 +63,16 @@ const styles = {
   grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px', marginBottom: '40px' },
   card: { backgroundColor: '#0f172a', border: '1px solid #1e293b', borderRadius: '24px', padding: '24px', color: '#f1f5f9' },
   profileHeader: { textAlign: 'center', marginBottom: '20px' },
-  avatar: { width: '96px', height: '96px', borderRadius: '50%', marginBottom: '16px', border: '2px solid #334155' },
-  userName: { fontSize: '20px', fontWeight: 'bold', margin: '0 0 4px 0' },
+avatar: {
+  display: 'block',
+  width: '96px',
+  height: '96px',
+  borderRadius: '50%',
+  objectFit: 'cover',
+  margin: '0 auto 16px auto',
+  border: '2px solid #6366f1',
+  boxShadow: '0 0 0 4px rgba(99, 102, 241, 0.15), 0 8px 24px rgba(0, 0, 0, 0.4)',
+}, userName: { fontSize: '20px', fontWeight: 'bold', margin: '0 0 4px 0' },
   userLink: { color: '#818cf8', fontSize: '14px', textDecoration: 'none' },
   bio: { fontSize: '14px', color: '#94a3b8', marginTop: '12px', lineHeight: '1.5' },
   statsRow: { display: 'flex', borderTop: '1px solid #1e293b', borderBottom: '1px solid #1e293b', padding: '16px 0', margin: '20px 0' },

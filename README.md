@@ -33,13 +33,3 @@ npm install
 
 4. Start the local development server:
 npm run dev
-
----
-
-### Step 3: Push the updates to GitHub
-Once you have saved the `README.md` file in VS Code, run these three quick commands in your terminal to update your repository online:
-
-```bash
-git add README.md
-git commit -m "docs: upgrade README with comprehensive architecture breakdown"
-git push
